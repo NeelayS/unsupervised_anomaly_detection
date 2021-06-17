@@ -4,10 +4,11 @@ Implementation of [Unsupervised Deep Anomaly Detection in Chest Radiographs](htt
 
 ## Steps to reproduce -
 
+- Install the dependencies in `requirements.txt` or create a conda environment using `environment.yml`.
 - Download the dataset from [Kaggle](https://www.kaggle.com/c/rsna-pneumonia-detection-challenge/rules) and extract it to the `data` directory.
 - Switch to the `data` directory and run `extract_images.py`. 
 ```
-cd data
+cd data/
 python extract_images.py
 ```
 
