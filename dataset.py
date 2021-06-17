@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset
+from torchvision import transforms
 import torch
 import cv2 as cv
 import os
@@ -16,9 +17,13 @@ class RNSADataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.root_dir, self.img_list[idx] + ".jpg")
-        img = cv.imread(img_path)
+
+        try:
+            img = cv.imread(img_path)
+        except:
+            pass
+
         img = cv.resize(img, dsize=(256, 256), interpolation=cv.INTER_LANCZOS4)
-        img = torch.Tensor(img)
 
         return img
 
@@ -43,17 +48,20 @@ def make_dataset(root_dir, class_info_csv, sampling_ratio=0.7):
     leftover_normal = normal[n_train:]
 
     n_leftover_normal = len(leftover_normal)
-    n_opacity = len(opaque)
+    n_opaque = len(opaque)
     n_other_abnormal = len(other_abnormal)
+
+    print(n_train, n_leftover_normal, n_opaque, n_other_abnormal)
+    print(len(os.listdir(root_dir)))
 
     val_list = (
         leftover_normal[: n_leftover_normal // 3]
-        + opaque[: n_opacity // 3]
+        + opaque[: n_opaque // 3]
         + other_abnormal[: n_other_abnormal // 3]
     )
     test_list = (
         leftover_normal[n_leftover_normal // 3 :]
-        + opaque[: n_opacity // 3 :]
+        + opaque[n_opaque // 3 :]
         + other_abnormal[n_other_abnormal // 3 :]
     )
 
