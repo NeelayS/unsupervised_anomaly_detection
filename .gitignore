@@ -133,3 +133,6 @@ data/images
 
 # Tinkering
 tinker.ipynb
+
+#IDE
+.vscode/
