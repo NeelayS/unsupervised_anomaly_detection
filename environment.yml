@@ -89,4 +89,3 @@ dependencies:
     - pydicom==2.1.2
     - pyparsing==2.4.7
     - pytz==2021.1
-prefix: /home/neelay/miniconda3/envs/anomaly
