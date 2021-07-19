@@ -21,6 +21,7 @@ class RNSADataset(Dataset):
         try:
             img = cv.imread(img_path)
         except:
+            print(f"Image {self.img_list[idx]} does not exist. Skipping")
             pass
 
         img = cv.resize(img, dsize=(256, 256), interpolation=cv.INTER_LANCZOS4)
