@@ -1,7 +1,5 @@
 # Unsupervised Anomaly Detection in Chest Radiographs
 
-Implementation of [Unsupervised Deep Anomaly Detection in Chest Radiographs](https://link.springer.com/article/10.1007/s10278-020-00413-2) using PyTorch.
-
 ## Steps to reproduce -
 
 - Install the dependencies in `requirements.txt` or create a conda environment using `environment.yml` and `conda activate anomaly`.
