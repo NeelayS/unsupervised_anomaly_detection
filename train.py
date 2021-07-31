@@ -22,10 +22,19 @@ def create_summary_writer(model, train_loader, log_dir, save_graph, device):
     return writer
 
 
-
-def train(model, optimizer, loss_fn, train_loader, val_loader,
-          log_dir, device, epochs, log_interval,
-          load_weight_path=None, save_graph=False):
+def train(
+    model,
+    optimizer,
+    loss_fn,
+    train_loader,
+    val_loader,
+    log_dir,
+    device,
+    epochs,
+    log_interval,
+    load_weight_path=None,
+    save_graph=False,
+):
 
     model.to(device)
     if load_weight_path is not None:
@@ -50,29 +59,30 @@ def train(model, optimizer, loss_fn, train_loader, val_loader,
             x, _ = batch
             x = x.to(device)
             y = model(x)
-            loss = loss_fn(y,x)
+            loss = loss_fn(y, x)
             return loss.item()
 
     trainer = Engine(process_function)
     evaluator = Engine(evaluate_function)
 
-    RunningAverage(output_transform=lambda x:x).attach(trainer,'loss')
-    RunningAverage(output_transform=lambda x:x).attach(evaluator,'loss')
+    RunningAverage(output_transform=lambda x: x).attach(trainer, "loss")
+    RunningAverage(output_transform=lambda x: x).attach(evaluator, "loss")
 
-
-    writer = create_summary_writer(model, train_loader, log_dir,
-                                   save_graph, device)
+    writer = create_summary_writer(model, train_loader, log_dir, save_graph, device)
 
     def score_function(engine):
-        return -engine.state.metrics['loss']
+        return -engine.state.metrics["loss"]
 
-    to_save = {'model': model}
+    to_save = {"model": model}
     handler = Checkpoint(
         to_save,
-        DiskSaver(os.path.join(log_dir, 'models'), create_dir=True),
-        n_saved=5, filename_prefix='best', score_function=score_function,
+        DiskSaver(os.path.join(log_dir, "models"), create_dir=True),
+        n_saved=5,
+        filename_prefix="best",
+        score_function=score_function,
         score_name="loss",
-        global_step_transform=global_step_from_engine(trainer))
+        global_step_transform=global_step_from_engine(trainer),
+    )
 
     evaluator.add_event_handler(Events.COMPLETED, handler)
 
@@ -82,8 +92,7 @@ def train(model, optimizer, loss_fn, train_loader, val_loader,
             f"Epoch[{engine.state.epoch}] Iteration[{engine.state.iteration}/"
             f"{len(train_loader)}] Loss: {engine.state.output:.3f}"
         )
-        writer.add_scalar("training/loss", engine.state.output,
-                          engine.state.iteration)
+        writer.add_scalar("training/loss", engine.state.output, engine.state.iteration)
 
     @trainer.on(Events.EPOCH_COMPLETED)
     def log_training_results(engine):

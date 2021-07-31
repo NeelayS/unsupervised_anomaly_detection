@@ -9,6 +9,7 @@
 cd data/
 python extract_images.py
 ```
+- Run the `main.py` file from the root directory with appropriate command line arguments.
 
 
 <b>Work in progress. Please check back later!</b>
