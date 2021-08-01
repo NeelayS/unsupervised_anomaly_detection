@@ -61,11 +61,3 @@ class AnomalyAE(nn.Module):
             self.bn_output(self.conv_output(torch.cat([x8, x], 1))), slope
         )
         return output
-
-
-if __name__ == "__main__":
-    x = torch.rand([1, 1, 512, 512])
-    model = AnomalyAE()
-    y = model(x)
-    print(x.shape, x.dtype)
-    print(y.shape, y.dtype)
